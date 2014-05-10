@@ -1,15 +1,20 @@
 
-pySwitch - Python switcher for Windows
-======================================
+pySwitch
+========
 
-Switch between different Versions of Python without any hassle.
+Switch easily between different installed versions of Python on Windows.
 
-**pySwitch is**
+**pySwitch**
 
-- a simple batch file without dependencies
-- does not clutter your registry
-- ...
+- works on the command line
+- has no dependencies
+- keeps your registry clean
 
-ToDos
------
-- Add Documentation
+How To Use
+----------
+...
+
+Issues/ToDos
+------------
+- Global/local version needed?
+- Add documentation
