@@ -1,7 +1,0 @@
-# Currently Installed Versions
-SuperSoft 1.0 = C:\Testdir with spaces\v1
-SuperSoft 2.0 = C:\Testdir with spaces\v2;C:\Testdir with spaces\v2\subdir
-SuperSoft 3.0 = C:\Testdir with spaces\v3
-
-# Remove from  Path
-The Hard Way = 
