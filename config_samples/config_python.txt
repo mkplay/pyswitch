@@ -1,4 +1,4 @@
-# Currently Installed Versions
+# Currently Installed Python Versions
 Python 2.7 = C:\Python27;C:\Python27\Scripts
 Python 3.4 = C:\Python34;C:\Python34\Scripts
   
