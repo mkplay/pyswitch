@@ -82,7 +82,7 @@ CHOICE /C %cstr% /M "-> Make your choice:" /N
 
 :: -- MAIN: ERRORLEVELS in decreasing order --
 set KEY_NAME=HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
-set KEY_TYPE=REG_EXPAND_SZ
+set VALUE_TYPE=REG_EXPAND_SZ
 set VALUE_NAME=Path
 SET /A lvl=!ubound!+1
 for /l %%n in (!ubound!,-1,0) do (
@@ -95,8 +95,8 @@ for /l %%n in (!ubound!,-1,0) do (
             ) else (
                 set add=
             )
-            REG ADD "%KEY_NAME%" /v "%VALUE_NAME%" /t %KEY_TYPE% /d "!add!%globalPath%" /f >nul
-            echo.
+            REG ADD "%KEY_NAME%" /v "%VALUE_NAME%" /t %VALUE_TYPE% /d "!add!%globalPath%" /f >nul
+            echo.m
             echo    You now use "!key!". Have Fun^^!
             GOTO RefreshUserEnvironment
         )
