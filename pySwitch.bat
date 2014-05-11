@@ -10,7 +10,7 @@ if %errorLevel% == 0 (
 ) else (
     echo.
     echo   %~n0 needs elevated permissions
-    echo   ...to be able to modify the global PATH variable ^(Windows Registry^) 
+    echo   ...to be able to modify the global PATH variable ^(Windows Registry^)
     echo.
     echo   Please start with "Run as administrator"
     echo.
@@ -20,7 +20,9 @@ if %errorLevel% == 0 (
 :: -- Get Global Path --
 set KEY_NAME=HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
 set VALUE_NAME=Path
-FOR /F "tokens=2*" %%A IN ('REG.exe query "%KEY_NAME%" /v "%VALUE_NAME%"') DO (set globalPath=%%B)
+FOR /F "tokens=2*" %%A IN ('REG.exe query "%KEY_NAME%" /v "%VALUE_NAME%"') DO (
+    set globalPath=%%B
+)
 
 :: -- Read Config File --
 set configFile=%~dp0config.txt
@@ -79,6 +81,9 @@ ECHO.
 CHOICE /C %cstr% /M "-> Make your choice:" /N
 
 :: -- MAIN: ERRORLEVELS in decreasing order --
+set KEY_NAME=HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
+set KEY_TYPE=REG_EXPAND_SZ
+set VALUE_NAME=Path
 SET /A lvl=!ubound!+1
 for /l %%n in (!ubound!,-1,0) do (
     for /f "tokens=1,2 delims==" %%r IN ("!arr[%%n]!") do (
@@ -90,7 +95,7 @@ for /l %%n in (!ubound!,-1,0) do (
             ) else (
                 set add=
             )
-            REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /v Path /t REG_EXPAND_SZ /d "!add!%globalPath%" /f >nul
+            REG ADD "%KEY_NAME%" /v "%VALUE_NAME%" /t %KEY_TYPE% /d "!add!%globalPath%" /f >nul
             echo.
             echo    You now use "!key!". Have Fun^^!
             GOTO RefreshUserEnvironment
@@ -103,7 +108,9 @@ for /l %%n in (!ubound!,-1,0) do (
 :RefreshUserEnvironment
 set KEY_NAME=HKCU\Environment
 set VALUE_NAME=Path
-FOR /F "tokens=2*" %%A IN ('REG.exe query "%KEY_NAME%" /v "%VALUE_NAME%"') DO (set userPath=%%B)
+FOR /F "tokens=2*" %%A IN ('REG.exe query "%KEY_NAME%" /v "%VALUE_NAME%"') DO (
+    set userPath=%%B
+)
 SetX %VALUE_NAME% "%userPath%" >nul
 ping 1.1.1.1 -n 1 -w 2000 > nul
 Goto End
