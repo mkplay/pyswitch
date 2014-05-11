@@ -5,8 +5,7 @@
 # To have a global effect affect to all repositories run this command:
 # git config --global core.excludesfile ~/.gitignore
 
-# Mac OS X Finder bloat
 .DS_Store
-
-# Windows crap
 Thumbs.db
+
+config.txt

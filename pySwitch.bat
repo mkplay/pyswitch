@@ -23,28 +23,39 @@ set VALUE_NAME=Path
 FOR /F "tokens=2*" %%A IN ('REG.exe query "%KEY_NAME%" /v "%VALUE_NAME%"') DO (set globalPath=%%B)
 
 :: -- Read Config File --
-set configFile=%~dp0\config.txt
-set /A i=0
-for /f "usebackq tokens=1,2 delims==" %%a in ("%configFile%") do (
-    set line=%%a
-    for /f "tokens=* delims= " %%a in ("!line!") do set line=%%a
-    if NOT "!line:~0,1!" == "#" (
+set configFile=%~dp0config.txt
+if exist "%configFile%" (
+    set /A i=0
+    for /f "usebackq tokens=1,2 delims==" %%a in ("%configFile%") do (
+        set line=%%a
+        for /f "tokens=* delims= " %%a in ("!line!") do set line=%%a
+        if NOT "!line:~0,1!" == "#" (
 
-        REM Trim key and value
-        set key=%%a
-        for /f "tokens=* delims= " %%s in ("!key!") do set key=%%s
-        for /l %%s in (1,1,100) do if "!key:~-1!"==" " set key=!key:~0,-1!
-        set val=%%b
-        for /f "tokens=* delims= " %%s in ("!val!") do set val=%%s
-        for /l %%s in (1,1,100) do if "!val:~-1!"==" " set val=!val:~0,-1!
-            
-        if NOT [!key!] == [] (         
-            call set arr[%%i%%]=!key!=!val!
-            set /A i+=1
-        )
-    ) 
+            REM Trim key and value
+            set key=%%a
+            for /f "tokens=* delims= " %%s in ("!key!") do set key=%%s
+            for /l %%s in (1,1,100) do if "!key:~-1!"==" " set key=!key:~0,-1!
+            set val=%%b
+            for /f "tokens=* delims= " %%s in ("!val!") do set val=%%s
+            for /l %%s in (1,1,100) do if "!val:~-1!"==" " set val=!val:~0,-1!
+                
+            if NOT [!key!] == [] (         
+                call set arr[%%i%%]=!key!=!val!
+                set /A i+=1
+            )
+        ) 
+    )
+    set /A ubound=!i!-1
+) else (
+    echo.
+    echo   The config file is missing^^!
+    echo.
+    echo   Please pick one from the "config_samples" directory,
+    echo   copy it to the same directory as  %~n0
+    echo   and rename it to "config.txt".
+    echo.
+    GOTO:EndWithPause
 )
-set /A ubound=!i!-1
 
 :: -- Cleanup Global Path --
 for /l %%i in (0,1,!ubound!) do (
