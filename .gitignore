@@ -1,11 +1,6 @@
-#
-# .gitignore
-#
-# Ignore works for the dir the gitignore file resides in.
-# To have a global effect affect to all repositories run this command:
-# git config --global core.excludesfile ~/.gitignore
-
+# Global Stuff
 .DS_Store
 Thumbs.db
 
+# Project Related Stuff
 config.txt
