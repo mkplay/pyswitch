@@ -96,7 +96,7 @@ for /l %%n in (!ubound!,-1,0) do (
                 set add=
             )
             REG ADD "%KEY_NAME%" /v "%VALUE_NAME%" /t %VALUE_TYPE% /d "!add!%globalPath%" /f >nul
-            echo.m
+            echo.
             echo    You now use "!key!". Have Fun^^!
             GOTO RefreshUserEnvironment
         )
