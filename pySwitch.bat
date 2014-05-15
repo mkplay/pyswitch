@@ -17,7 +17,7 @@ if %errorLevel% == 0 (
     GOTO:EndWithPause
 )
 
-:: -- Get Global Path --
+:: -- Get Global Path Contents --
 set KEY_NAME=HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
 set VALUE_NAME=Path
 FOR /F "tokens=2*" %%A IN ('REG.exe query "%KEY_NAME%" /v "%VALUE_NAME%"') DO (
@@ -31,16 +31,21 @@ if exist "%configFile%" (
     for /f "usebackq tokens=1,2 delims==" %%a in ("%configFile%") do (
         set line=%%a
         for /f "tokens=* delims= " %%a in ("!line!") do set line=%%a
+        
+        REM Check if line starts with # (= comment)
         if NOT "!line:~0,1!" == "#" (
-
-            REM Trim key and value
             set key=%%a
-            for /f "tokens=* delims= " %%s in ("!key!") do set key=%%s
-            for /l %%s in (1,1,100) do if "!key:~-1!"==" " set key=!key:~0,-1!
             set val=%%b
+            
+            REM Trim Left
+            for /f "tokens=* delims= " %%s in ("!key!") do set key=%%s
             for /f "tokens=* delims= " %%s in ("!val!") do set val=%%s
+            
+            REM Trim Right
+            for /l %%s in (1,1,100) do if "!key:~-1!"==" " set key=!key:~0,-1!
             for /l %%s in (1,1,100) do if "!val:~-1!"==" " set val=!val:~0,-1!
                 
+            REM Push key=val to the result array
             if NOT [!key!] == [] (         
                 call set arr[%%i%%]=!key!=!val!
                 set /A i+=1
@@ -80,7 +85,8 @@ for /F "tokens=2 delims==" %%s in ('set arr[') do (
 ECHO.
 CHOICE /C %cstr% /M "-> Make your choice:" /N
 
-:: -- MAIN: ERRORLEVELS in decreasing order --
+:: -- MAIN --
+REM Check errorlevels in decreasing order!
 set KEY_NAME=HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
 set VALUE_TYPE=REG_EXPAND_SZ
 set VALUE_NAME=Path
@@ -112,6 +118,7 @@ FOR /F "tokens=2*" %%A IN ('REG.exe query "%KEY_NAME%" /v "%VALUE_NAME%"') DO (
     set userPath=%%B
 )
 SetX %VALUE_NAME% "%userPath%" >nul
+REM wait 2000 ms
 ping 1.1.1.1 -n 1 -w 2000 > nul
 Goto End
 

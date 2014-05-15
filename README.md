@@ -25,8 +25,6 @@ pySwitch nor clutters your registry neither removes vital entries from the syste
 
 Please understand: I can't guarantee - use pySwitch at your own risk.
 
-Issues/ToDos
-------------
-- Add some commenting in the .bat
-- Evaluate working with the global PATH vs. the local PATH
-
+ToDos
+-----
+- Maybe later: evaluate dealing with the local/user PATH vs. the currently used global PATH
